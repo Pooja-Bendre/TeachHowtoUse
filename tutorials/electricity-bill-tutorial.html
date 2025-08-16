@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Electricity Bill Tutorial - Teach your parents smartphone</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            background-image: url('../images/comic-books-bg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto 0 auto;
+            padding: 32px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .language-selector select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--primary);
+            background-color: #ffffff;
+            color: #333;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        h1 {
+            color: #fff;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7), 0 1px 0 #000;
+            background: var(--gradient-mixed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .step-instructions {
+            background-color: var(--primary-light);
+            border-left: 5px solid var(--primary);
+            color: var(--text-dark);
+        }
+
+        .progress-dot.active {
+            background: var(--primary);
+        }
+
+        .tutorial-controls button {
+            background: var(--gradient-purple);
+            color: #ffffff;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            padding: 12px 24px;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .tutorial-controls button:disabled {
+            background: #cccccc;
+            color: #666666;
+        }
+
+        .phone-container {
+            border: 12px solid #333;
+            border-radius: 36px;
+            background: #ffffff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            position: relative;
+            width: 320px;
+        }
+
+        .screen {
+            display: none;
+            position: relative;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .screenshot {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .clickable-area {
+            position: absolute;
+            background-color: rgba(95, 37, 159, 0);
+            border: 2px solid rgba(95, 37, 159, 0);
+            cursor: pointer;
+            z-index: 9999;
+            transition: all 0.3s ease;
+        }
+
+        .debug-mode .clickable-area {
+            background-color: rgba(95, 37, 159, 0.2);
+            border: 2px dashed #5f259f;
+        }
+
+        .feedback {
+            position: absolute;
+            background-color: #4CAF50;
+            color: white;
+            padding: 5%;
+            border-radius: 10px;
+            font-size: 16px;
+            width: 70%;
+            left: 15%;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            top: 50%;
+        }
+
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .progress-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ddd;
+            margin: 0 6px;
+            transition: background 0.3s;
+        }
+
+        .progress-dot.active {
+            background: #5f259f;
+        }
+
+        .tutorial-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .step-instructions {
+            background-color: #e8f4fd;
+            border-left: 5px solid #5f259f;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            width: 100%;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .step-instructions strong {
+            color: #5f259f;
+        }
+
+        /* Dark mode styles */
+        .dark-mode {
+            background-image: url('../images/comic-books-bg.jpg');
+            background-color: #181828 !important;
+            color: #f3f3f3 !important;
+        }
+
+        .dark-mode .container {
+            background: rgba(24, 24, 40, 0.95) !important;
+            color: #f3f3f3 !important;
+        }
+
+        .dark-mode .step-instructions {
+            background-color: #23234a !important;
+            border-left: 5px solid #a084e8 !important;
+            color: #e0e0e0 !important;
+        }
+
+        .dark-mode .progress-dot {
+            background: #444 !important;
+        }
+
+        .dark-mode .progress-dot.active {
+            background: #a084e8 !important;
+        }
+
+        .dark-mode .tutorial-controls button {
+            background: linear-gradient(90deg, #a084e8 0%, #5f259f 100%) !important;
+            color: #fff !important;
+        }
+
+        .dark-mode .phone-container {
+            background: #23234a !important;
+            border-color: #a084e8 !important;
+        }
+
+        .dark-mode .feedback {
+            background-color: #23234a !important;
+            color: #fff !important;
+        }
+
+        .dark-mode .back-link {
+            color: #a084e8 !important;
+        }
+
+        .dark-mode .clickable-area {
+            border-color: #a084e8 !important;
+        }
+
+        .dark-mode .debug-mode .clickable-area {
+            background-color: rgba(160, 132, 232, 0.2) !important;
+            border: 2px dashed #a084e8 !important;
+        }
+
+        .dark-mode .dark-mode-toggle button {
+            background: #23234a !important;
+            color: #fff !important;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px 2vw;
+            }
+
+            .phone-container {
+                width: 98vw;
+                min-width: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation controls -->
+        <div class="nav-controls">
+            <!-- Dark mode toggle -->
+            <div class="dark-mode-toggle">
+                <button id="dark-mode-toggle" class="theme-toggle-btn">
+                    <span class="light-icon">☀️</span>
+                    <span class="dark-icon">🌙</span>
+                </button>
+            </div>
+            <div class="language-selector">
+                <select id="language-select" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी</option>
+                </select>
+            </div>
+        </div>
+        <h1 style="text-align:center;margin-bottom:18px;">Pay Your Electricity Bill</h1>
+        <div class="step-instructions" id="step-instructions">
+            <strong>Step 1:</strong> Tap the "Electricity Bill" option on the home screen.
+        </div>
+        <div class="progress-indicator">
+            <div class="progress-dot active" data-step="1"></div>
+            <div class="progress-dot" data-step="2"></div>
+            <div class="progress-dot" data-step="3"></div>
+            <div class="progress-dot" data-step="4"></div>
+            <div class="progress-dot" data-step="5"></div>
+            <div class="progress-dot" data-step="6"></div>
+        </div>
+        <div class="phone-container" id="phone-container">
+            <!-- Step 1 -->
+            <div class="screen active" id="home-screen">
+                <img src="../images/electricity-tutorial/home.png" alt="Electricity Home Screen" class="screenshot">
+                <div class="clickable-area" id="bill-option-area" style="top:45%;left:50%;width:12%;height:10%;"></div>
+                <div class="feedback" id="home-feedback">Great! Now select your State.</div>
+            </div>
+            <!-- Step 2 -->
+            <div class="screen" id="state-screen">
+                <img src="../images/electricity-tutorial/state.png" alt="Select State" class="screenshot">
+                <div class="clickable-area" id="state-area" style="top:28%;left:10%;width:80%;height:8%;"></div>
+                <div class="feedback" id="state-feedback">Good! Now select your Sub Division.</div>
+            </div>
+            <!-- Step 3 -->
+            <div class="screen" id="subdivision-screen">
+                <img src="../images/electricity-tutorial/sub_division.png" alt="Select Sub Division" class="screenshot">
+                <!-- Adjust these values as needed for your UI -->
+                <div class="clickable-area" id="subdivision-area" style="top:45%;left:5%;width:90%;height:11%;"></div>
+                <div class="feedback" id="subdivision-feedback">Nice! Now enter your Consumer Number.</div>
+            </div>
+            <!-- Step 4 -->
+            <div class="screen" id="consumer-screen">
+                <img src="../images/electricity-tutorial/consumer_name.png" alt="Enter Consumer Number" class="screenshot">
+                <div class="clickable-area" id="consumer-area" style="top:55%;left:10%;width:80%;height:10%;"></div>
+                <div class="feedback" id="consumer-feedback">Well done! Now tap View Bill.</div>
+            </div>
+            <!-- Step 5 -->
+            <div class="screen" id="viewbill-screen">
+                <img src="../images/electricity-tutorial/view.png" alt="View Bill" class="screenshot">
+                <div class="clickable-area" id="viewbill-area" style="top:55%;left:50%;width:70%;height:10%;"></div>
+                <div class="feedback" id="viewbill-feedback">Almost there! Now tap Pay.</div>
+            </div>
+            <!-- Step 6 -->
+            <div class="screen" id="pay-screen">
+                <img src="../images/electricity-tutorial/pay.png" alt="Pay Bill" class="screenshot">
+                <div class="clickable-area" id="pay-area" style="top:67%;left:10%;width:80%;height:10%;"></div>
+                <div class="feedback" id="pay-feedback">Congratulations! You have paid your bill.</div>
+            </div>
+        </div>
+        <div class="tutorial-controls">
+            <button id="prev-button" disabled>Previous</button>
+            <button id="reset-button">Start Over</button>
+            <button id="debug-toggle">Show Clickable Areas</button>
+        </div>
+        <a href="/" class="back-link">← Back to Home</a>
+    </div>
+    <script>
+        // Tutorial state
+        const tutorial = {
+            currentStep: 1,
+            totalSteps: 6,
+            expectedActions: {
+                1: 'bill-option-area',
+                2: 'state-area',
+                3: 'subdivision-area',
+                4: 'consumer-area',
+                5: 'viewbill-area',
+                6: 'pay-area'
+            },
+            instructions: {
+                1: '<strong>Step 1:</strong> Tap the "Electricity Bill" option on the home screen.',
+                2: '<strong>Step 2:</strong> Select your State.',
+                3: '<strong>Step 3:</strong> Select your Sub Division.',
+                4: '<strong>Step 4:</strong> Enter your Consumer Number.',
+                5: '<strong>Step 5:</strong> Tap View Bill.',
+                6: '<strong>Step 6:</strong> Tap Pay to complete your payment.'
+            },
+            feedbacks: [
+                "Great! Now select your State.",
+                "Good! Now select your Sub Division.",
+                "Nice! Now enter your Consumer Number.",
+                "Well done! Now tap View Bill.",
+                "Almost there! Now tap Pay.",
+                "Congratulations! You have paid your bill."
+            ]
+        };
+        
+
+
+        // DOM elements
+        const screens = [
+            document.getElementById('home-screen'),
+            document.getElementById('state-screen'),
+            document.getElementById('subdivision-screen'),
+            document.getElementById('consumer-screen'),
+            document.getElementById('viewbill-screen'),
+            document.getElementById('pay-screen')
+        ];
+        const feedbacks = [
+            document.getElementById('home-feedback'),
+            document.getElementById('state-feedback'),
+            document.getElementById('subdivision-feedback'),
+            document.getElementById('consumer-feedback'),
+            document.getElementById('viewbill-feedback'),
+            document.getElementById('pay-feedback')
+        ];
+        const stepInstructions = document.getElementById('step-instructions');
+        const progressDots = document.querySelectorAll('.progress-dot');
+        const prevButton = document.getElementById('prev-button');
+        const resetButton = document.getElementById('reset-button');
+        const debugToggle = document.getElementById('debug-toggle');
+
+        // Set up clickable areas
+        document.getElementById('bill-option-area').onclick = handleAreaClick;
+        document.getElementById('state-area').onclick = handleAreaClick;
+        document.getElementById('subdivision-area').onclick = handleAreaClick;
+        document.getElementById('consumer-area').onclick = handleAreaClick;
+        document.getElementById('viewbill-area').onclick = handleAreaClick;
+        document.getElementById('pay-area').onclick = handleAreaClick;
+
+        function handleAreaClick(e) {
+            const clickedId = e.target.id;
+            const expectedId = tutorial.expectedActions[tutorial.currentStep];
+            if (clickedId === expectedId) {
+                showFeedback(tutorial.currentStep - 1, true);
+                setTimeout(() => {
+                    if (tutorial.currentStep < tutorial.totalSteps) {
+                        goToStep(tutorial.currentStep + 1);
+                    }
+                }, 1200);
+            } else {
+                showFeedback(tutorial.currentStep - 1, false);
+            }
+        }
+
+        function showFeedback(idx, success) {
+            feedbacks.forEach(fb => fb.style.opacity = 0);
+            const fb = feedbacks[idx];
+            if (fb) {
+                fb.style.backgroundColor = success ? '#4CAF50' : '#f44336';
+                fb.textContent = success
+                    ? tutorial.feedbacks[idx]
+                    : 'Try again! Click the highlighted area.';
+                fb.style.opacity = 1;
+                setTimeout(() => { fb.style.opacity = 0; }, 1000);
+            }
+        }
+
+        function goToStep(step) {
+            tutorial.currentStep = step;
+            screens.forEach((screen, idx) => {
+                screen.classList.toggle('active', idx === step - 1);
+            });
+            stepInstructions.innerHTML = tutorial.instructions[step];
+            progressDots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === step - 1);
+            });
+            prevButton.disabled = step === 1;
+        }
+
+        prevButton.onclick = function() {
+            if (tutorial.currentStep > 1) {
+                goToStep(tutorial.currentStep - 1);
+            }
+        };
+        resetButton.onclick = function() {
+            goToStep(1);
+        };
+        debugToggle.onclick = function() {
+            document.body.classList.toggle('debug-mode');
+            debugToggle.textContent = document.body.classList.contains('debug-mode')
+                ? 'Hide Clickable Areas'
+                : 'Show Clickable Areas';
+        };
+
+        // Dark mode functionality
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        });
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme')) {
+            body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+        }
+    </script>
+    
+    <!-- Include localization script -->
+    <script src="../js/localization.js"></script>
+    <script>
+        // Initialize localization when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add data-i18n attributes to elements that need translation
+            document.querySelector('h1').setAttribute('data-i18n', 'tutorial.title');
+            
+            // Add data-i18n attributes to step instructions
+            const stepInstructions = document.querySelector('.step-instructions');
+            stepInstructions.setAttribute('data-i18n', 'step1.instruction');
+            
+            // Add data-i18n attributes to feedback messages
+            const feedbackElements = document.querySelectorAll('.feedback-message');
+            const feedbackKeys = ['welcome', 'state', 'subdivision', 'consumer', 'viewbill', 'pay'];
+            feedbackElements.forEach((feedback, index) => {
+                if (index < feedbackKeys.length) {
+                    feedback.setAttribute('data-i18n', `feedback.${feedbackKeys[index]}`);
+                }
+            });
+            
+            // Add data-i18n attribute to completion message
+            const completionMessage = document.querySelector('.completion-message');
+            if (completionMessage) {
+                completionMessage.setAttribute('data-i18n', 'completion.message');
+            }
+            
+            // Add data-i18n attribute to completion success message
+            const completionSuccess = document.querySelector('.completion-success');
+            if (completionSuccess) {
+                completionSuccess.setAttribute('data-i18n', 'completion.success');
+            }
+            
+            // Initialize localization
+            initLocalization();
+        });
+        
+        // Override the changeLanguage function to work with the tutorial
+        function changeLanguage(lang) {
+            if (LANGUAGES[lang] && lang !== currentLanguage) {
+                currentLanguage = lang;
+                localStorage.setItem('language', lang);
+
+                // Update HTML lang attribute
+                document.documentElement.lang = lang;
+                document.documentElement.dir = LANGUAGES[lang].dir;
+
+                // Load translations and update the page
+                const pageName = getPageName();
+                loadTranslations(pageName);
+                
+                // Update the selected option
+                document.getElementById('language-select').value = lang;
+            }
+        }
+    </script>
+</body>
+
+</html>

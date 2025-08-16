@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.title">WhatsApp Video Call Tutorial - Teach your parents smartphone</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .clickable-area {
+            position: absolute;
+            background-color: rgba(95, 37, 159, 0);
+            /* Transparent initially */
+            border: 2px solid rgba(95, 37, 159, 0);
+            /* Transparent initially */
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .debug-mode .clickable-area {
+            background-color: rgba(95, 37, 159, 0.2);
+            border: 2px dashed #5f259f;
+        }
+
+        #select-contact {
+            left: 1.5%;
+            top: 35%;
+            width: 97%;
+            height: 11%;
+        }
+
+        #back-to-home {
+            left: 1.5%;
+            top: 1.5%;
+            width: 12.5%;
+            height: 6.25%;
+        }
+
+        #video-call-button {
+            right: 18.75%;
+            /* 60px / 320px */
+            top: 1.5%;
+            width: 12.5%;
+            height: 6.25%;
+        }
+
+        #end-call-button {
+            position: relative !important;
+        }
+
+        .step-instructions {
+            background-color: grey;
+            border-left: 5px solid #25D366;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            width: 100%;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .step-instructions strong {
+            color: #075E54;
+        }
+
+        /* Make feedback messages responsive */
+        .feedback {
+            position: absolute;
+            background-color: var(--success);
+            color:grey;
+            padding: 5%;
+            border-radius: 10px;
+            font-size: 16px;
+            width: 70%;
+            left: 15%;
+            /* Center horizontally */
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #home-feedback {
+            top: 60%;
+        }
+
+        #chat-feedback {
+            top: 60%;
+        }
+
+        #call-feedback {
+            top: 30%;
+            z-index: 100;
+        }
+
+        .call-container {
+            width: 100%;
+            height: 100%;
+            background-color: #111;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .remote-video {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remote-user {
+            text-align: center;
+            color: white;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background-color: #444;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .self-preview {
+            position: absolute;
+            top: 5%;
+            right: 5%;
+            width: 25%;
+            height: 25%;
+            background-color: #444;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .call-controls {
+            position: absolute;
+            bottom: 10%;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10%;
+        }
+
+        .control-button {
+            width: 60px;
+            height: 60px;
+            background-color: #444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .end-call {
+            background-color: #FF3B30;
+        }
+
+        .completion-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .success-check {
+            color: white;
+            font-size: 50px;
+        }
+
+        .completion-title {
+            color: #075E54;
+            margin-bottom: 10px;
+        }
+
+        .completion-message {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .try-again-button {
+            padding: 12px 30px;
+            background-color: #075E54;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .try-again-button:hover {
+            background-color: #064a42;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Dark mode toggle -->
+        <div class="dark-mode-toggle">
+            <button id="dark-mode-toggle" class="theme-toggle-btn">
+                <span class="light-icon">☀️</span>
+                <span class="dark-icon">🌙</span>
+            </button>
+        </div>
+        
+        <h1 data-i18n="tutorial.title">Making a Video Call on WhatsApp</h1>
+        <div class="progress-indicator">
+            <div class="progress-dot active" data-step="1"></div>
+            <div class="progress-dot" data-step="2"></div>
+            <div class="progress-dot" data-step="3"></div>
+        </div>
+
+        <!-- Step instructions will be updated dynamically -->
+        <div class="step-instructions" id="step-instructions" data-i18n="step1.instruction">
+            <strong>Step 1:</strong> This is your WhatsApp chats list. All your conversations appear here. To make a
+            video call, first tap on the contact you want to call. In this example, tap on "Random Aunty".
+        </div>
+
+        <div class="phone-container" id="phone-container">
+            <!-- Home Screen - Contacts List -->
+            <div class="screen" id="home-screen">
+                <!-- Home screen image - your WhatsApp contacts screen -->
+                <img src="../images/video-call-whatsapp/home.png" alt="WhatsApp Contacts Screen"
+                    class="screenshot language-image" data-img-base="../images/video-call-whatsapp/home">
+
+                <!-- Define clickable areas for home screen with responsive positioning -->
+                <div class="clickable-area" id="select-contact" data-next-screen="chat-screen"></div>
+
+                <div class="feedback" id="home-feedback" data-i18n="feedback.home">
+                    Good job! Now you'll see the chat screen for this contact.
+                </div>
+            </div>
+
+            <!-- Chat Screen - Individual chat with video call icon -->
+            <div class="screen hidden" id="chat-screen">
+                <!-- Chat screen image - individual chat with video call icon -->
+                <img src="../images/video-call-whatsapp/chat.png" alt="WhatsApp Chat Screen"
+                    class="screenshot language-image" data-img-base="../images/video-call-whatsapp/chat">
+
+                <!-- Define clickable areas with responsive positioning -->
+                <div class="clickable-area" id="back-to-home" data-next-screen="home-screen"></div>
+                <div class="clickable-area" id="video-call-button" data-next-screen="call-screen"></div>
+
+                <div class="feedback" id="chat-feedback" data-i18n="feedback.chat">
+                    Perfect! You've clicked the video call button. Your call is connecting.
+                </div>
+            </div>
+
+            <!-- Video Call Screen -->
+            <div class="screen hidden" id="call-screen">
+                <!-- Video call screen with better responsive styling -->
+                <div class="call-container">
+                    <!-- Remote video -->
+                    <div class="remote-video">
+                        <div class="remote-user">
+                            <div class="avatar">👤</div>
+                            <p style="font-size: 20px; margin-bottom: 5px;">Random Aunty</p>
+                            <p style="font-size: 14px; opacity: 0.7;">Call connected</p>
+                        </div>
+                    </div>
+
+                    <!-- Self preview -->
+                    <div class="self-preview" data-i18n="video.self">You</div>
+
+                    <!-- Call controls -->
+                    <div class="call-controls">
+                        <div class="control-button">🔇</div>
+                        <div class="control-button end-call clickable-area" id="end-call-button"
+                            data-next-screen="completion-screen">✕</div>
+                        <div class="control-button">🔄</div>
+                    </div>
+                </div>
+
+                <div class="feedback" id="call-feedback" data-i18n="feedback.call">
+                    Well done! You've ended the call by pressing the red button.
+                </div>
+            </div>
+
+            <!-- Completion Screen (success message) -->
+            <div class="screen hidden" id="completion-screen">
+                <div class="completion-container">
+                    <div class="success-icon">
+                        <span class="success-check">✓</span>
+                    </div>
+                    <h2 class="completion-title" data-i18n="completion.success">Call Completed!</h2>
+                    <p class="completion-message" data-i18n="completion.message">You've successfully made a WhatsApp
+                        video call</p>
+                    <button class="try-again-button" onclick="resetTutorial()" data-i18n="button.tryAgain">Try
+                        Again</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-complete" id="task-complete">
+            <span data-i18n="tutorial.completion">Congratulations! You've successfully learned how to make a video call
+                on WhatsApp.</span>
+            <br><br>
+            <button onclick="window.location.href='/'" class="primary-button" data-i18n="button.back">Back to
+                Home</button>
+            <button onclick="resetTutorial()" data-i18n="button.tryAgain">Try Again</button>
+        </div>
+
+        <div class="tutorial-controls">
+            <button id="prev-button" disabled data-i18n="button.previous">Previous Step</button>
+            <button id="hint-button" data-i18n="button.hint">Show Hint</button>
+            <button id="reset-button" data-i18n="button.reset">Start Over</button>
+            <button id="debug-toggle" data-i18n="button.debug">Show Clickable Areas</button>
+        </div>
+
+        <a href="/" class="back-link">← <span data-i18n="button.back">Back to Home</span></a>
+    </div>
+    <!-- ...existing code... -->
+    <style>
+        /* ...existing styles... */
+
+        /* Dark mode styles */
+        .dark-mode {
+            background-image: url('../images/comic-books-bg.jpg');
+            background-color: #181828 !important;
+            color: #f3f3f3 !important;
+        }
+        .dark-mode .container {
+            background: rgba(24, 24, 40, 0.95) !important;
+            color: #f3f3f3 !important;
+        }
+        .dark-mode .step-instructions {
+            background-color: #23234a !important;
+            border-left: 5px solid #a084e8 !important;
+            color: #e0e0e0 !important;
+        }
+        .dark-mode .progress-dot {
+            background: #444 !important;
+        }
+        .dark-mode .progress-dot.active {
+            background: #a084e8 !important;
+        }
+        .dark-mode .tutorial-controls button {
+            background: linear-gradient(90deg, #a084e8 0%, #5f259f 100%) !important;
+            color: #fff !important;
+        }
+        .dark-mode .phone-container {
+            background: #23234a !important;
+            border-color: #a084e8 !important;
+        }
+        .dark-mode .feedback {
+            background-color: #23234a !important;
+            color: #fff !important;
+        }
+        .dark-mode .back-link {
+            color: #a084e8 !important;
+        }
+        .dark-mode .clickable-area {
+            border-color: #a084e8 !important;
+        }
+        .dark-mode .debug-mode .clickable-area {
+            background-color: rgba(160, 132, 232, 0.2) !important;
+            border: 2px dashed #a084e8 !important;
+        }
+        .dark-mode .dark-mode-toggle button {
+            background: #23234a !important;
+            color: #fff !important;
+        }
+    </style>
+<!-- ...existing code... -->
+
+    <!-- Load the localization script -->
+    <script src="../js/localization.js"></script>
+
+    <script>
+        // Tutorial state
+        const tutorial = {
+            currentScreen: 'home-screen',
+            currentStep: 1,
+            totalSteps: 3,
+            expectedActions: {
+                'home-screen': 'select-contact',
+                'chat-screen': 'video-call-button',
+                'call-screen': 'end-call-button'
+            },
+            instructions: {
+                // Instructions will be loaded from translation files
+            }
+        };
+
+        // Get DOM elements
+        const phoneContainer = document.getElementById('phone-container');
+        const instructionsElement = document.getElementById('step-instructions');
+        const prevButton = document.getElementById('prev-button');
+        const hintButton = document.getElementById('hint-button');
+        const resetButton = document.getElementById('reset-button');
+        const debugToggle = document.getElementById('debug-toggle');
+        const taskComplete = document.getElementById('task-complete');
+
+        // Set up event listeners for clickable areas
+        document.querySelectorAll('.clickable-area').forEach(area => {
+            area.addEventListener('click', handleAreaClick);
+        });
+
+        // Set up tutorial control buttons
+        prevButton.addEventListener('click', goToPreviousStep);
+        hintButton.addEventListener('click', showHint);
+        resetButton.addEventListener('click', resetTutorial);
+        debugToggle.addEventListener('click', toggleDebugMode);
+
+        // Update instructions text
+        function updateInstructions() {
+            // Get translation key for current step
+            const key = `step${tutorial.currentStep}.instruction`;
+
+            // Get translated instruction from the i18n system
+            const translations = window.localization?.getTranslations() || {};
+            const translatedInstruction = translations[key];
+
+            if (translatedInstruction) {
+                instructionsElement.innerHTML = translatedInstruction;
+            } else {
+                // Fallback - get the data-i18n attribute's original content
+                instructionsElement.setAttribute('data-i18n', key);
+            }
+        }
+
+        // Update the progress indicator
+        function updateProgress() {
+            document.querySelectorAll('.progress-dot').forEach(dot => {
+                const step = parseInt(dot.dataset.step);
+                if (step === tutorial.currentStep) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        // Handle clicking on interactive areas
+        function handleAreaClick(e) {
+            const clickedId = e.target.id;
+            const currentScreen = tutorial.currentScreen;
+            const expectedAction = tutorial.expectedActions[currentScreen];
+
+            if (clickedId === expectedAction) {
+                // Show success feedback
+                const feedbackId = `${currentScreen.split('-')[0]}-feedback`;
+                const feedback = document.getElementById(feedbackId);
+                if (feedback) {
+                    feedback.style.opacity = '1';
+
+                    // Wait a moment, then proceed to next screen
+                    setTimeout(() => {
+                        const nextScreen = e.target.dataset.nextScreen;
+                        if (nextScreen) {
+                            transitionToScreen(nextScreen);
+
+                            // Update step
+                            if (tutorial.currentStep < tutorial.totalSteps) {
+                                tutorial.currentStep++;
+                                updateProgress();
+                                updateInstructions();
+                                updateButtonStates();
+                            }
+                        }
+                    }, 1500);
+                }
+            } else {
+                // If it's a back button, allow navigation
+                if (clickedId.includes('back-') && e.target.dataset.nextScreen) {
+                    transitionToScreen(e.target.dataset.nextScreen);
+                    tutorial.currentStep--;
+                    updateProgress();
+                    updateInstructions();
+                    updateButtonStates();
+                } else {
+                    // Wrong action - provide hint
+                    showHint();
+                }
+            }
+        }
+
+        // Transition to a different screen
+        function transitionToScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+
+            // Hide all feedback messages
+            document.querySelectorAll('.feedback').forEach(feedback => {
+                feedback.style.opacity = '0';
+            });
+
+            // Show the target screen
+            document.getElementById(screenId).classList.remove('hidden');
+
+            // Update current screen in tutorial state
+            tutorial.currentScreen = screenId;
+
+            // Remove any highlights
+            document.querySelectorAll('.highlight').forEach(element => {
+                element.classList.remove('highlight');
+            });
+
+            // Show task complete message if reached the final screen
+            if (screenId === 'completion-screen') {
+                setTimeout(() => {
+                    taskComplete.style.display = 'block';
+                }, 1500);
+            } else {
+                taskComplete.style.display = 'none';
+            }
+        }
+
+        // Go to the previous step
+        function goToPreviousStep() {
+            if (tutorial.currentStep > 1) {
+                tutorial.currentStep--;
+
+                // Determine which screen to show based on the step
+                let targetScreen;
+                if (tutorial.currentStep === 1) {
+                    targetScreen = 'home-screen';
+                } else if (tutorial.currentStep === 2) {
+                    targetScreen = 'chat-screen';
+                }
+
+                transitionToScreen(targetScreen);
+                updateProgress();
+                updateInstructions();
+                updateButtonStates();
+            }
+        }
+
+        // Show hint by highlighting the correct element
+        function showHint() {
+            const currentScreen = tutorial.currentScreen;
+            const expectedAction = tutorial.expectedActions[currentScreen];
+
+            // Remove any existing highlights
+            document.querySelectorAll('.highlight').forEach(element => {
+                element.classList.remove('highlight');
+            });
+
+            // Add highlight to the expected action
+            const elementToHighlight = document.getElementById(expectedAction);
+            if (elementToHighlight) {
+                elementToHighlight.classList.add('highlight');
+
+                // Get translated instruction with HINT prefix
+                const key = `step${tutorial.currentStep}.instruction`;
+                const translations = window.localization?.getTranslations() || {};
+                const translatedInstruction = translations[key];
+
+                if (translatedInstruction) {
+                    instructionsElement.innerHTML = "<strong>HINT:</strong> " + translatedInstruction.replace(/<strong>.*?<\/strong>/, '');
+                } else {
+                    // Fallback
+                    instructionsElement.innerHTML = "<strong>HINT:</strong> " + instructionsElement.innerHTML.replace(/<strong>.*?<\/strong>/, '');
+                }
+            }
+        }
+
+        // Reset the tutorial to the beginning
+        function resetTutorial() {
+            tutorial.currentScreen = 'home-screen';
+            tutorial.currentStep = 1;
+
+            transitionToScreen('home-screen');
+            updateProgress();
+            updateInstructions();
+            updateButtonStates();
+
+            taskComplete.style.display = 'none';
+        }
+
+        // Toggle debug mode to show/hide clickable areas
+        function toggleDebugMode() {
+            phoneContainer.classList.toggle('debug-mode');
+            if (phoneContainer.classList.contains('debug-mode')) {
+                debugToggle.textContent = window.localization?.getTranslations()?.['button.hideDebug'] || 'Hide Clickable Areas';
+            } else {
+                debugToggle.textContent = window.localization?.getTranslations()?.['button.debug'] || 'Show Clickable Areas';
+            }
+        }
+
+        // Update the state of the navigation buttons
+        function updateButtonStates() {
+            prevButton.disabled = tutorial.currentStep === 1;
+        }
+
+        // Load tutorial instructions based on selected language
+        function loadTutorialInstructions() {
+            // Automatically handled by the localization.js script
+            // which will translate all elements with data-i18n attributes
+
+            // Set instructions for each step
+            for (let i = 1; i <= tutorial.totalSteps; i++) {
+                const key = `step${i}.instruction`;
+                tutorial.instructions[i] = window.localization?.getTranslations()?.[key] ||
+                    document.querySelector(`[data-i18n="${key}"]`)?.innerHTML || '';
+            }
+
+            // Update current instruction
+            updateInstructions();
+        }
+
+        // Initialize the tutorial
+        function initTutorial() {
+            updateProgress();
+
+            // Check if localization script is loaded
+            if (window.localization) {
+                // Add callback for language changes
+                const originalChangeLanguage = window.localization.changeLanguage;
+                window.localization.changeLanguage = function (lang) {
+                    originalChangeLanguage(lang);
+                    // After language change, update tutorial content
+                    loadTutorialInstructions();
+                };
+
+                // Initialize translations
+                window.localization.getTranslations = function () {
+                    return window.translationCache?.[`${window.localization.getCurrentLanguage()}_whatsapp`] || {};
+                };
+            }
+
+            loadTutorialInstructions();
+            updateButtonStates();
+        }
+
+        // Start the tutorial when the page loads
+        window.onload = initTutorial;
+    </script>
+    
+    <!-- Dark mode functionality -->
+    <script>
+        // Dark mode functionality
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        
+        // Apply the saved theme on page load
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+        
+        // Toggle dark mode
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            // Save the current theme preference
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        });
+        
+        // Check system preference for dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme')) {
+            body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+        }
+    </script>
+</body>
+
+</html>
