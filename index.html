@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.title">Help other peoples to learn smartphone basics - Simple App Learning Guide</title>
+    <meta name="description" data-i18n-attr="content=meta.description"
+        content="Easy step-by-step practice guide to help parents and seniors learn essential smartphone apps like PhonePe, WhatsApp, Google Maps, and more.">
+    <meta name="keywords"
+        content="smartphone tutorial, app learning, senior tech help, parent tech support, phonepe tutorial, whatsapp tutorial, digital literacy, mobile guide">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.teach-your-parents-smartphone.com/">
+    <meta property="og:title" content="Teach Your Parents Smartphone - Simple App Learning Guides">
+    <meta property="og:description"
+        content="Easy step-by-step practice guide to help parents and seniors learn essential smartphone apps like PhonePe, WhatsApp, Google Maps, and more.">
+    <meta property="og:image" content="https://www.teach-your-parents-smartphone.com/images/preview.png">
+    <meta property="og:site_name" content="Teach Your Parents Smartphone">
+    <meta property="og:locale" content="en_US">
+
+    
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.teach-your-parents-smartphone.com/">
+    <meta property="twitter:title" content="Teach Your Parents Smartphone - Simple App Learning Guides">
+    <meta property="twitter:description"
+        content="Easy step-by-step practice guide to help parents and seniors learn essential smartphone apps like PhonePe, WhatsApp, Google Maps, and more.">
+    <meta property="twitter:image" content="https://www.teach-your-parents-smartphone.com/images/preview.png">
+    <meta name="twitter:site" content="@the2ndfloorguy">
+    <meta name="twitter:creator" content="@the2ndfloorguy">
+    <link rel="stylesheet" href="styles.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6SRWY7LFJ4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-6SRWY7LFJ4');
+    </script>
+    <style>
+        .tutorial-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .tutorial-card {
+            min-height: 320px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .footer a {
+            color: #5f259f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-links {
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            margin: 0 15px;
+        }
+
+        .about-link {
+            display: inline-flex;
+            align-items: center;
+            color: #5f259f;
+            text-decoration: none;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .about-link svg {
+            margin-right: 5px;
+            stroke: #5f259f;
+        }
+
+        .about-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .tutorial-grid {
+                grid-template-columns: 1fr;
+                
+                gap: 20px;
+            }
+
+            .tutorial-card {
+                min-height: 280px;
+                
+            }
+        }
+
+        
+    </style>
+</head>
+
+<!-- ...existing code... -->
+<body>
+    <nav class="modern-nav">
+        <div class="nav-brand">
+            <div class="brand-icon">📱</div>
+            <span class="brand-text custom-black">TEACH HOW TO USE !</span>
+        </div>
+        <div class="nav-controls">
+            <div class="language-selector">
+                <select id="language-select" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="ka">ಕನ್ನಡ</option>
+                </select>
+            </div>
+            <button id="dark-mode-toggle" class="modern-theme-toggle">
+                <span class="light-icon">☀️</span>
+                <span class="dark-icon">🌙</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="modern-container">
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title custom-black">TEACH HOW TO USE !</h1>
+                <p class="hero-subtitle custom-black">Learn how to use popular apps with step-by-step practice guide.</p>
+            </div>
+        </section>
+
+        <section class="tutorials-section">
+            <div class="section-header">
+                <h2 class="section-title custom-black">Start Learning</h2>
+                <p class="section-subtitle custom-black">Choose any tutorial below to begin your smartphone learning journey</p>
+            </div>
+            <!-- ...existing tutorial cards... -->
+        </section>
+        <!-- ...existing code... -->
+        </section>
+
+        
+            <div class="modern-tutorial-grid">
+                
+                <div class="modern-tutorial-card" data-category="payments">
+                    <a href="tutorials/phonepe-tutorial.html" class="modern-card-link">
+                        <div class="card-header">
+                            <div class="card-icon">💸</div>
+                            <div class="card-category">Payments</div>
+                        </div>
+                        <div class="card-image">
+                            <img src="images/phonepe.png" alt="PhonePe App" class="card-app-image">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title" data-i18n="card.phonepe.title">Send Money on PhonePe</h3>
+                            <p class="card-description" data-i18n="card.phonepe.description">Learn how to send money to a mobile number using PhonePe app.</p>
+                            <div class="card-footer">
+                                <span class="difficulty">Beginner</span>
+                                <span class="duration">5 min</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                
+                <div class="modern-tutorial-card" data-category="communication">
+                    <a href="tutorials/whatsapp-tutorial.html" class="modern-card-link">
+                        <div class="card-header">
+                            <div class="card-icon">📱</div>
+                            <div class="card-category">Communication</div>
+                        </div>
+                        <div class="card-image">
+                            <img src="images/whatsapp.png" alt="WhatsApp App" class="card-app-image">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title" data-i18n="card.whatsapp.title">Use WhatsApp Video Call</h3>
+                            <p class="card-description" data-i18n="card.whatsapp.description">Learn how to make video calls to family and friends.</p>
+                            <div class="card-footer">
+                                <span class="difficulty">Beginner</span>
+                                <span class="duration">3 min</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                
+                <div class="modern-tutorial-card" data-category="utilities">
+                    <a href="tutorials/electricity-bill-tutorial.html" class="modern-card-link">
+                        <div class="card-header">
+                            <div class="card-icon">⚡</div>
+                            <div class="card-category">Utilities</div>
+                        </div>
+                        <div class="card-image">
+                            <img src="images/lightbulb.jpg" alt="Electricity Bill Payment" class="card-app-image">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title" data-i18n="card.electricity.title">Pay Electricity Bill</h3>
+                            <p class="card-description" data-i18n="card.electricity.description">Learn how to pay your electricity bill using Paytm with step-by-step guidance.</p>
+                            <div class="card-footer">
+                                <span class="difficulty">Intermediate</span>
+                                <span class="duration">7 min</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                
+                <div class="modern-tutorial-card" data-category="transportation">
+                    <a href="tutorials/ola-uber-tutorial.html" class="modern-card-link">
+                        <div class="card-header">
+                            <div class="card-icon">🚕</div>
+                            <div class="card-category">Transportation</div>
+                        </div>
+                        <div class="card-image">
+                            <img src="images/ola.jpg" alt="Ola/Uber App" class="card-app-image">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title" data-i18n="card.ride.title">Book an Ola/Uber Ride</h3>
+                            <p class="card-description" data-i18n="card.ride.description">Learn how to book a cab and track your driver.</p>
+                            <div class="card-footer">
+                                <span class="difficulty">Beginner</span>
+                                <span class="duration">6 min</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                
+                <div class="modern-tutorial-card" data-category="navigation">
+                    <a href="tutorials/google-maps-tutorial.html" class="modern-card-link">
+                        <div class="card-header">
+                            <div class="card-icon">🗺️</div>
+                            <div class="card-category">Navigation</div>
+                        </div>
+                        <div class="card-image">
+                            <img src="images/googlemap.png" alt="Google Maps App" class="card-app-image">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title" data-i18n="card.maps.title">Navigate with Google Maps</h3>
+                            <p class="card-description" data-i18n="card.maps.description">Learn how to find directions and navigate to new places.</p>
+                            <div class="card-footer">
+                                <span class="difficulty">Beginner</span>
+                                <span class="duration">4 min</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                
+                <div class="modern-tutorial-card" data-category="travel">
+                    <a href="tutorials/train-ticket-tutorial.html" class="modern-card-link">
+                        <div class="card-header">
+                            <div class="card-icon">🚂</div>
+                            <div class="card-category">Travel</div>
+                        </div>
+                        <div class="card-image">
+                            <img src="images/ticket.jpg" alt="IRCTC Train Booking" class="card-app-image">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title" data-i18n="card.train.title">Book Train Tickets</h3>
+                            <p class="card-description" data-i18n="card.train.description">Learn how to book train tickets using the IRCTC app.</p>
+                            <div class="card-footer">
+                                <span class="difficulty">Advanced</span>
+                                <span class="duration">10 min</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="stats-about-section">
+            <div class="section-content">
+                
+                <div class="stats-container">
+                    <div class="stat-item stat-red">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">Tutorials</div>
+                    </div>
+                    <div class="stat-item stat-green">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Languages</div>
+                    </div>
+                    <div class="stat-item stat-black">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Free</div>
+                    </div>
+                </div>
+            </div>
+            <!-- ...existing tutorial cards... -->
+        </section>
+        <!-- ...existing code... -->
+    </div>
+    <script src="./js/localization.js"></script>
+    <script>
+        // Dark mode functionality
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>
+
+    

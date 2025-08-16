@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page.title">About - Teach Your Parents Smartphone</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-image: url('images/comic-books-bg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        .about-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .page-title {
+            margin-bottom: 5px;
+        }
+        
+        .subheading {
+            color: #666;
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-align: center;
+            transition: color 0.3s ease;
+        }
+        
+        h2 {
+            color: #5f259f;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 22px;
+            transition: color 0.3s ease;
+        }
+        
+        p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #444;
+            margin-bottom: 16px;
+            transition: color 0.3s ease;
+        }
+        
+        a {
+            color: #5f259f;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #5f259f;
+            transition: color 0.3s ease;
+        }
+        
+        /* Footer styling */
+        .footer {
+            margin-top: 50px;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+            color: #666;
+            transition: border-top-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .footer a {
+            color: #5f259f;
+            transition: color 0.3s ease;
+        }
+        
+        /* Dark mode styles for about page */
+        body.dark-mode .subheading {
+            color: #d1d5db;
+        }
+        
+        body.dark-mode h2 {
+            color: #8b5cf6;
+        }
+        
+        body.dark-mode p {
+            color: #f3f4f6;
+        }
+        
+        body.dark-mode a {
+            color: #8b5cf6;
+        }
+        
+        body.dark-mode .back-link {
+            color: #8b5cf6;
+        }
+        
+        body.dark-mode .footer {
+            border-top-color: #374151;
+            color: #d1d5db;
+        }
+        
+        body.dark-mode .footer a {
+            color: #8b5cf6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Dark mode toggle -->
+        <div class="dark-mode-toggle">
+            <button id="dark-mode-toggle" class="theme-toggle-btn">
+                <span class="light-icon">☀️</span>
+                <span class="dark-icon">🌙</span>
+            </button>
+        </div>
+        
+    <!-- Load the localization script -->
+    <script src="js/localization.js"></script>
+    
+    <!-- Dark mode functionality -->
+    <script>
+        // Dark mode functionality
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        
+        // Apply the saved theme on page load
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+        
+        // Toggle dark mode
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            // Save the current theme preference
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        });
+        
+        // Check system preference for dark mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme')) {
+            body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+        }
+    </script>
+</body>
+</html>
